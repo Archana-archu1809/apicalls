@@ -36,6 +36,7 @@ function TodoGet() {
       })
       .catch((error) => console.log(error));
   }, []);
+  const getApi = () => {};
   const data = todoList.map((row) => ({
     Description: row.description,
     id: row._id,
