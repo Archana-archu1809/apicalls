@@ -1,13 +1,13 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-
 const apiUrl = "https://api-nodejs-todolist.herokuapp.com/task";
-function getApi() {
+function postApi(data) {
   return fetch(apiUrl, {
-    method: "GET",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("value")}`,
     },
+    body: JSON.stringify(data),
   })
     .then((response) => response.json())
 
@@ -15,16 +15,16 @@ function getApi() {
       throw error;
     });
 }
-function* fetchTodo(action) {
+function* fetchTodo(data) {
   try {
-    const todo = yield call(getApi);
-
-    yield put({ type: "GET_TODO_SUCCESS", todo: todo.data });
+    const todo = yield call(postApi, data);
+    console.log(todo);
+    yield put({ type: "ADD_TODO_SUCCESS", todo: todo });
   } catch (e) {
-    yield put({ type: "GET_TODO_FAILURE", message: e.message });
+    yield put({ type: "ADD_TODO_FAILURE", message: e.message });
   }
 }
-function* todoSaga() {
-  yield takeEvery("GET_TODO_REQUESTED", fetchTodo);
+function* postSaga() {
+  yield takeEvery("ADD_TODO_REQUESTED", fetchTodo);
 }
-export default todoSaga;
+export default postSaga;

@@ -4,26 +4,25 @@ const initialState = {
   loading: false,
   error: null,
 };
-export default function todo(state = initialState, action) {
+export default function postTodo(state = initialState, action) {
   switch (action.type) {
-    case type.GET_TODO_REQUESTED:
+    case type.ADD_TODO_REQUESTED:
       return {
         ...state,
         loading: true,
       };
-    case type.GET_TODO_SUCCESS:
+    case type.ADD_TODO_SUCCESS:
       return {
         ...state,
         loading: false,
         todo: action.todo,
       };
-    case type.GET_TODO_FAILURE:
+    case type.ADD_TODO_FAILURE:
       return {
         ...state,
         loading: false,
         error: action.message,
       };
-
     default:
       return state;
   }
