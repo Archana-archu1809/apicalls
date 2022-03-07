@@ -12,11 +12,11 @@ export default function delTodo(state = initialState, action) {
         loading: true,
       };
     case type.DEL_TODO_SUCCESS:
-      const todo1 = todo.filter((todo) => todo._id !== _id);
+      const todo = state.todo;
+      const newState = todo.filter((todo) => todo._id !== action._id);
       return {
-        ...state,
         loading: false,
-        todo: todo1,
+        newState,
       };
     case type.DEL_TODO_FAILURE:
       return {
