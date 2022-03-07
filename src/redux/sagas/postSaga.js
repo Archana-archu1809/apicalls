@@ -16,8 +16,9 @@ function postApi(data) {
     });
 }
 function* fetchTodo(data) {
+  console.log(data);
   try {
-    const todo = yield call(postApi, data);
+    const todo = yield call(postApi, data.data);
     console.log(todo);
     yield put({ type: "ADD_TODO_SUCCESS", todo: todo });
   } catch (e) {

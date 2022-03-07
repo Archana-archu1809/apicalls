@@ -23,6 +23,25 @@ export default function postTodo(state = initialState, action) {
         loading: false,
         error: action.message,
       };
+    case type.DEL_TODO_REQUESTED:
+      return {
+        ...state,
+        loading: true,
+      };
+    case type.DEL_TODO_SUCCESS:
+      const todo = todo.filter((todo) => todo._id !== action.todo);
+      return {
+        ...state,
+        loading: false,
+        todo: todo,
+      };
+    case type.DEL_TODO_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.message,
+      };
+
     default:
       return state;
   }
