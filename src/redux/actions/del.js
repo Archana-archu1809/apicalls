@@ -1,8 +1,8 @@
 import * as type from "../types";
-export function deleteTodo(_id) {
-  console.log(_id);
+export function deleteTodo(id) {
+  console.log(id);
   return {
     type: type.DEL_TODO_REQUESTED,
-    _id,
+    id,
   };
 }

@@ -1,11 +1,13 @@
 import React,{useState,useEffect} from "react"
 import {useSelector,useDispatch} from "react-redux"
-import {Card,Button, Modal,Input,Form} from "antd"
+import {Button, Modal,Input,Switch,Table,Popconfirm,message} from "antd"
 
 import { getTodo } from "../redux/actions/todo"
 import {postTodo} from "../redux/actions/post"
 import { connect } from "react-redux"
-import { del, deleteTodo } from "../redux/actions/del"
+import {  deleteTodo } from "../redux/actions/del"
+import { updateTodo } from "../redux/actions/update"
+
 
 function Todo(props){
     const [visible, setVisible] = useState(false);
@@ -19,6 +21,7 @@ function Todo(props){
       const error=useSelector((state)=>state.todo.error)
      
     useEffect(()=>{
+     
         dispatch(getTodo())
       
        
@@ -43,19 +46,69 @@ function Todo(props){
     console.log("Clicked cancel button");
     setVisible(false);
   };
- const deletetodo=(todo)=>{
-    props.deleteSaga(todo._id)
+  
+ const deletetodo=(record)=>{
+    props.deleteSaga(record.id)
   }
+  const onupdate=(todo,checked)=>{
+  
+  
+ props.updateSaga(todo.id,checked)
+ 
+  }
+ 
+  const data=todo.map((row)=>({
+    Description:row.description,
+    id:row._id
+  }))
+
+ const columns=[
+   {title:"Description",
+  dataIndex:"Description",
+  key:"Description",
+   width: 150,
+   align: "center",
+  },
+   {title:"Edit",
+  dataIndex:"Edit",
+  key:"Edit",
+   width: 150,
+   align: "center",
+   render:(Edit,record,index)=>{
+     return(
+       <Switch onChange={(checked)=>onupdate(record,checked)}
+       
+       />
+     )
+   }
+  },
+   {title:"Delete",
+  dataIndex:"Delete",
+  key:"Delete",
+   width: 150,
+   align: "center",
+   render:(Delete,record,index)=>{
+     return(
+    
+      <Button type="primary" onClick={()=>deletetodo(record)}>Delete</Button>
+   
+    
+      
+     )
+   }
+  },
+
+ ]
     return(<div>
+      <h3>TodoList</h3>
    {todo.loading && <p>loading...</p>}
   {todo.length > 0 &&
-   todo.map((todo)=>(<Card key={todo._id}><h3>{todo.description}</h3>
-   <Button onClick={()=>{deletetodo(todo)}}>Delete</Button>
-   </Card>))}
- 
+    <Table dataSource={data} columns={columns} />
+  }
+   
     {todo.length === 0 && !loading && <p>No Todollist</p>}
     {error && !loading && <p>{error}</p>}
-    <Button type="primary" onClick={showModal}>Add</Button>
+    <Button type="primary" onClick={showModal}>Add Description</Button>
     <Modal 
      title="Title"
     visible={visible}
@@ -71,12 +124,14 @@ function Todo(props){
         </Modal>
       
      
-
-    </div>)
+         
+    </div>
+   )
 }
 const mapStateToProps=(state)=>{
   return{
-      todo:state.postTodo.todo
+      todo:state.postTodo.todo,
+      
   }
 }
 const mapDispatchToProps=(dispatch)=>{
@@ -84,9 +139,13 @@ const mapDispatchToProps=(dispatch)=>{
         postApi:(data)=>{
             dispatch(postTodo(data))
         },
-        deleteSaga:(_id)=>{
-           dispatch(deleteTodo(_id))
+        deleteSaga:(id)=>{
+           dispatch(deleteTodo(id))
+        },
+        updateSaga:(id,checked)=>{
+          dispatch(updateTodo(id,checked))
         }
+
 
     }
 }

@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 
-function delSaga({ _id }) {
-  const apiUrl = `https://api-nodejs-todolist.herokuapp.com/task/${_id}`;
+function delSaga({ id }) {
+  const apiUrl = `https://api-nodejs-todolist.herokuapp.com/task/${id}`;
   return fetch(apiUrl, {
     method: "DELETE",
     headers: {
@@ -14,11 +14,10 @@ function delSaga({ _id }) {
       throw error;
     });
 }
-function* delTodo(_id) {
-  console.log(_id);
+function* delTodo(id) {
   try {
-    const todo = yield call(delSaga, _id);
-    alert("Are You sure to delete ");
+    const todo = yield call(delSaga, id);
+
     yield put({ type: "DEL_TODO_SUCCESS", todo: todo });
   } catch (e) {
     yield put({ type: "DEL_TODO_FAILURE", message: e.message });
