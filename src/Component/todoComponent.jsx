@@ -1,12 +1,14 @@
 import React,{useState,useEffect} from "react"
 import {useSelector,useDispatch} from "react-redux"
 import {Button, Modal,Input,Switch,Table,Popconfirm,message} from "antd"
+import{ExclamationCircleOutlined} from "@ant-design/icons"
 
 import { getTodo } from "../redux/actions/todo"
 import {postTodo} from "../redux/actions/post"
 import { connect } from "react-redux"
 import {  deleteTodo } from "../redux/actions/del"
 import { updateTodo } from "../redux/actions/update"
+const{confirm}=Modal
 
 
 function Todo(props){
@@ -46,8 +48,10 @@ function Todo(props){
     console.log("Clicked cancel button");
     setVisible(false);
   };
+
   
  const deletetodo=(record)=>{
+   
     props.deleteSaga(record.id)
   }
   const onupdate=(todo,checked)=>{
@@ -56,6 +60,25 @@ function Todo(props){
  props.updateSaga(todo.id,checked)
  
   }
+  function showDelete(record) {
+    console.log(record)
+    props.deleteSaga(record.id)
+  confirm({
+    title: 'Are you sure delete this task?',
+    icon: <ExclamationCircleOutlined />,
+    content: 'Some descriptions',
+    okText: 'Yes',
+    okType: 'danger',
+    cancelText: 'No',
+    onOk() {
+      console.log('OK');
+    },
+    onCancel() {
+      console.log('Cancel');
+    },
+  });
+}
+
  
   const data=todo.map((row)=>({
     Description:row.description,
@@ -89,10 +112,10 @@ function Todo(props){
    align: "center",
    render:(Delete,record,index)=>{
      return(
-    
-      <Button type="primary" onClick={()=>deletetodo(record)}>Delete</Button>
    
     
+   
+    <Button onClick={()=>showDelete(record)}>Delete</Button>
       
      )
    }
