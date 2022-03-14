@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from "react"
 import {useSelector,useDispatch} from "react-redux"
-import {Button, Modal,Input,Switch,Table,Popconfirm,message} from "antd"
+import {Button, Modal,Input,Switch,Table,Popconfirm,message,Alert} from "antd"
 import{ExclamationCircleOutlined} from "@ant-design/icons"
 
 import { getTodo } from "../redux/actions/todo"
@@ -61,8 +61,7 @@ function Todo(props){
  
   }
   function showDelete(record) {
-    console.log(record)
-    props.deleteSaga(record.id)
+   
   confirm({
     title: 'Are you sure delete this task?',
     icon: <ExclamationCircleOutlined />,
@@ -71,12 +70,23 @@ function Todo(props){
     okType: 'danger',
     cancelText: 'No',
     onOk() {
+ 
+       console.log(record)
+    props.deleteSaga(record.id);
+   
       console.log('OK');
+        
+    
+   
+ 
     },
     onCancel() {
       console.log('Cancel');
     },
   });
+}
+const success=()=>{
+  message.success('This is a success message');
 }
 
  
